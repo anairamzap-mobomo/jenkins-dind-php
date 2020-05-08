@@ -10,14 +10,14 @@ RUN apt-get update \
     && apt-get -y --no-install-recommends install \
     php-cli \
     php-xml \ 
-    composer \
     build-essential \
-    git \
+    #git \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 #USER jenkins
-COPY id_rsa /home/jenkins/.ssh/
-COPY id_rsa.pub /home/jenkins/.ssh/
+COPY id_rsa* /home/jenkins/.ssh/
+COPY id_rsa* /var/jenkins_home/.ssh/
+
 
 RUN chown -R jenkins: /home/jenkins/.ssh
 
