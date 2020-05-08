@@ -1,5 +1,7 @@
 FROM jenkins/ssh-slave:latest
 
+ARG JENKINS_AGENT_HOME=/var/jenkins_home
+
 # Install selected extensions and other stuff
 #We need docker to run bin/composer thingy.
 RUN  curl -sSL https://get.docker.com/ | sh
