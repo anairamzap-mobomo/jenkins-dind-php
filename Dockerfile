@@ -1,4 +1,4 @@
-FROM jenkins/ssh-slave
+FROM jenkins/ssh-slave:latest
 
 # Install selected extensions and other stuff
 #We need docker to run bin/composer thingy.
