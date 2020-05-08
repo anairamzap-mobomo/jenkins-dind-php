@@ -10,3 +10,6 @@ RUN apt-get update \
     php-xdebug \ 
     composer \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+COPY id_rsa /home/jenkins/.ssh/
+COPY id_rsa.pub /home/jenkins/.ssh/
