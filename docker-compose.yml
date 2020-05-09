@@ -1,0 +1,114 @@
+version: '3.8'
+services:
+# Docker daemon. DNS name "docker"
+  docker:
+    container_name: jenkins-docker
+    image: docker:dind
+    privileged: true
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    environment:
+        - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+        - jenkins-docker-certs:/certs/client
+        - jenkins-data:/var/jenkins_home
+    ports:
+      - '2376:2376'
+
+# Nginx with reverse proxy for SSL/https.
+  jenkins-nginx:
+    depends_on:
+      - docker
+    container_name: jenkins-nginx
+    image: jwilder/nginx-proxy
+    hostname: jenkins-nginx
+    privileged: true
+#    extra_hosts:
+#      - "localhost:127.0.0.1"
+#      - "jenkins-nginx:127.0.0.1"
+    networks:
+     - jenkins
+    environment:
+      - DOCKER_CERT_PATH=/etc/nginx/certs
+      - DOCKER_TLS_VERIFY=1
+      - DHPARAM_GENERATION=0
+    ports:
+      - '8880:80'
+      - '1443:443'
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - jenkins-docker-certs:/etc/nginx/certs
+
+# Jenkins blueocean.
+  jenkins:
+    depends_on:
+      - docker
+      - jenkins-nginx
+    container_name: jenkins-blueocean
+    image: jenkinsci/blueocean
+    networks:
+      - jenkins
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - "jenkins-data:/var/jenkins_home"
+      - "jenkins-docker-certs:/certs/client:ro"
+      - agent-home:/home/jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+
+  portainer:
+    depends_on:
+      - docker
+    image: portainer/portainer
+    restart: always
+    environment:
+      - DOCKER_TLS_VERIFY=1
+      - DOCKER_CERT_PATH=/certs/client
+    networks:
+      - jenkins
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+      - jenkins-docker-certs:/certs/client:ro
+    ports:
+    - 9000:9000
+
+  ssh-agent:
+    domainname: ssh-agent
+    hostname: jenkins
+    container_name: jenkins-ssh_agent
+    depends_on:
+      - jenkins
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: anairamzap/jenkins-dind-php:latest
+    environment:
+      - JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY}
+      - JAVA_HOME=/usr/lib/jvm/openjdk/
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    networks:
+      jenkins:
+        aliases:
+          - jenkins.ssh-agent
+    volumes:
+      - jenkins-docker-certs:/certs/client:ro
+      - jenkins-data:/var/jenkins_home
+      - agent-home:/home/jenkins
+
+networks:
+  jenkins:
+    driver: bridge
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
+  portainer_data:
+  agent-home:
