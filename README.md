@@ -7,4 +7,4 @@ Provides:
 - nginx proxy (mainly to be able to use TLS / https)
 - portainer (to have a lovely web UI to manage containers)
 
-Docs are over here:
+Docs are over here: [https://anairamzap-mobomo.github.io/jenkins-dind-php](https://anairamzap-mobomo.github.io/jenkins-dind-php/)
