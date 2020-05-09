@@ -1,0 +1,474 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Documenting the Jenkins implementation :)">
+      
+      
+      
+        <meta name="author" content="anairamzap">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="img/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.1.1">
+    
+    
+      
+        <title>MBN CI/CD docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/application.3020aac5.css">
+      
+        <link rel="stylesheet" href="assets/stylesheets/application-palette.224b79ff.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#ef5350">
+      
+    
+    
+      <script src="assets/javascripts/modernizr.01ccdecf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="red" data-md-color-accent="">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#mbn-cicd" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="index.html" title="MBN CI/CD docs" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon">rowing</i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              MBN CI/CD docs
+            </span>
+            <span class="md-header-nav__topic">
+              Intro
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="index.html" title="MBN CI/CD docs" class="md-nav__button md-logo">
+      
+        <i class="md-icon">rowing</i>
+      
+    </a>
+    MBN CI/CD docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Intro
+      </label>
+    
+    <a href="index.html" title="Intro" class="md-nav__link md-nav__link--active">
+      Intro
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#server-details" title="Server Details" class="md-nav__link">
+    Server Details
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stumped-into-some-odd-bugs-in-the-road" title="Stumped into some odd bugs in the road" class="md-nav__link">
+    Stumped into some odd bugs in the road
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="docker_containers.html" title="Dockerize all the things!" class="md-nav__link">
+      Dockerize all the things!
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="workflow.html" title="Workflow" class="md-nav__link">
+      Workflow
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="qa_server.html" title="Server Data" class="md-nav__link">
+      Server Data
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#server-details" title="Server Details" class="md-nav__link">
+    Server Details
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stumped-into-some-odd-bugs-in-the-road" title="Stumped into some odd bugs in the road" class="md-nav__link">
+    Stumped into some odd bugs in the road
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="mbn-cicd">MBN CI/CD<a class="headerlink" href="#mbn-cicd" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Access</p>
+<p>We are now using github login. So you should be able to see jobs/tasks in Jenkins using your
+gitHub username. </p>
+<p>If you need admin access let Edu or Mariana know so we can add you to the Admin List. </p>
+</div>
+<p>We are Using Jenkins in order to automate the following tasks:</p>
+<ol>
+<li>
+<p>PR Builds (using the <code>Jenkinsfile.testing</code> pipeline)</p>
+</li>
+<li>
+<p><code>develop</code> branch build (using the <code>Jenkinsfile.testing</code> pipeline)</p>
+</li>
+<li>
+<p>Acquia Dev env deployments (hopefully one day!) <img alt="🤞🏾" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f91e-1f3fe.png" title=":fingers_crossed_tone4:" /></p>
+</li>
+</ol>
+<h2 id="server-details">Server Details<a class="headerlink" href="#server-details" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://jenkins.mobomo.net">https://jenkins.mobomo.net</a>  <img alt="🔐" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f510.png" title=":closed_lock_with_key:" /> <img alt="👀" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f440.png" title=":eyes:" /></li>
+<li>Algo más? <img alt="🤔" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f914.png" title=":thinking_face:" /></li>
+</ul>
+<h2 id="stumped-into-some-odd-bugs-in-the-road">Stumped into some odd bugs in the road <img alt="🐛" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f41b.png" title=":bug:" /> <img alt="🐞" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f41e.png" title=":beetle:" /> <img alt="🐜" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f41c.png" title=":ant:" /> <img alt="🦠" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f9a0.png" title=":microbe:" /><a class="headerlink" href="#stumped-into-some-odd-bugs-in-the-road" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>git Acquia repo requires git username/email</p>
+<p><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>*** Please tell me who you are.
+
+Run
+
+  git config --global user.email <span class="s2">&quot;you@example.com&quot;</span>
+  git config --global user.name <span class="s2">&quot;Your Name&quot;</span>
+
+to <span class="nb">set</span> your account<span class="err">&#39;</span>s default identity.
+Omit --global to <span class="nb">set</span> the identity only in this repository.
+
+fatal: empty ident name <span class="o">(</span><span class="k">for</span> &lt;<span class="o">(</span>null<span class="o">)</span>&gt;<span class="o">)</span> not allowed
+<span class="o">[</span>ExecStack<span class="o">]</span>  Exit code <span class="m">128</span> 
+<span class="o">[</span>error<span class="o">]</span>  Could not initialize new git repository. 
+</pre></div>
+</td></tr></table>
+Apparently the&rsquo;ve fixed this in blt version 10.x: <a href="https://github.com/acquia/blt/pull/3541">https://github.com/acquia/blt/pull/3541</a></p>
+<p>As a workaround (since updating the blt version could very likely cause other issues I wanted to avoid)
+I&rsquo;ve added a git config user.name and user.email in the agent Dockerfile&hellip; <img alt="😇" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f607.png" title=":innocent:" /></p>
+</li>
+<li>
+<p>git acquia repo key not found/trusted</p>
+<p>In order to workaround this issue I had to run the <code>blt artifact:deploy</code> command manually from the jenkins agent repo
+and accept the connection:</p>
+<p><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>The authenticity of host <span class="s1">&#39;svn-2398.enterprise-g1.hosting.acquia.com (54.208.34.237)&#39;</span> can<span class="s1">&#39;t be established.</span>
+<span class="s1">RSA key fingerprint is SHA256:bV2a1i24wN1fKHPklmexouKYRnnp/TZtzV24Wd+fpoQ.</span>
+<span class="s1">Are you sure you want to continue connecting (yes/no)? yes</span>
+<span class="s1">Warning: Permanently added &#39;</span>svn-2398.enterprise-g1.hosting.acquia.com,54.208.34.237<span class="err">&#39;</span> <span class="o">(</span>RSA<span class="o">)</span> to the list of known hosts.
+</pre></div>
+</td></tr></table>
+Thanks so much Acquia! <img alt="✨" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/2728.png" title=":sparkles:" /> <img alt="❤" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/2764.png" title=":heart:" /></p>
+</li>
+<li>
+<p>On <code>composer install</code> run by the <code>vendor/bin/blt artifact:deploy</code> command (which is using robo)</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>Generating optimized autoload files
+In AutoloadGenerator.php line <span class="m">1054</span>:
+
+  fopen<span class="o">(</span>/usr/share/php/Composer/Autoload/../../../doc/composer/copyright<span class="o">)</span>: failed to open stream: No such file or directory
+</pre></div>
+</td></tr></table>
+
+</li>
+</ol>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+        
+          <a href="docker_containers.html" title="Dockerize all the things!" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Dockerize all the things!
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="assets/javascripts/application.dc02f8ce.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"."}})</script>
+      
+    
+  </body>
+</html>

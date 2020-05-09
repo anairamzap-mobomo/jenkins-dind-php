@@ -1,0 +1,82 @@
+/*Emoji Size*/
+img.twemoji {
+    max-width: 1rem;
+}
+/* Progress bar twaks */
+
+/* Only for pb inside listings */
+li .progress-short {
+    width: 20%;
+    display: inline-block;
+    margin: 6px auto;
+    vertical-align: middle;
+    bottom: 2px;
+}
+li .progress-short .progress-label {
+    font-size: 0.8em;
+    margin-top: 1px !important;
+}
+/**/
+
+.progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: 700;
+  width: 100%;
+  margin: 0 !important;
+  line-height: 2.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 2.2rem;
+  float: left;
+  background-color: #2979ff;
+}
+
+.progress {
+  display: block;
+  width: 50%;
+  margin: 0.5rem 0;
+  height: 2.2rem;
+  background-color: #eeeeee;
+  position: relative;
+}
+
+.progress.thin {
+  margin-top: 0.9rem;
+  height: 0.4rem;
+}
+
+.progress.thin .progress-label {
+  margin-top: -0.4rem;
+}
+
+.progress.thin .progress-bar {
+  height: 0.4rem;
+}
+
+.progress-100plus .progress-bar {
+  background-color: #00e676;
+}
+
+.progress-80plus .progress-bar {
+  background-color: #fbc02d;
+}
+
+.progress-60plus .progress-bar {
+  background-color: #ff9100;
+}
+
+.progress-40plus .progress-bar {
+  background-color: #ff5252;
+}
+
+.progress-20plus .progress-bar {
+  background-color: #ff1744;
+}
+
+.progress-0plus .progress-bar {
+  background-color: #f50057;
+}
