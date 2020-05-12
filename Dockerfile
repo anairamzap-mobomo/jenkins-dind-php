@@ -13,4 +13,5 @@ RUN chmod +x /usr/local/bin/jenkins-entrypoint
 USER jenkins
 
 # start image with init.sh script
-ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins-entrypoint"]
+ENTRYPOINT ["/usr/local/bin/jenkins-entrypoint"]
+CMD ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]

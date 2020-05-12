@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#set -ex
+set -eo pipefail
 
 mkdir -p ${HOME}/.ssh
 # If not already present, we generate a ssh key pair to be used in the SSH connection with the agent.
