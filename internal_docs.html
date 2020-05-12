@@ -277,9 +277,9 @@
                 
                 <h1 id="to-implement-on-qa-server">To implement on QA server<a class="headerlink" href="#to-implement-on-qa-server" title="Permanent link">&para;</a></h1>
 <ol>
-<li>Build the jenkins-blueocean iimage and spin it up i order to get the SSh key pair is generated:</li>
+<li>Build the jenkins-blueocean image and spin it up in order to get the SSh key pair is generated:</li>
 </ol>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker build --no-cache -t jenkins-blueocean . <span class="o">&amp;&amp;</span> docker-compose -f docker-compose.yml up --force-recreate -d jenkins-blueocean
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker-compose -f docker-compose.yml up --force-recreate --build -d jenkins-blueocean
 </pre></div>
 </td></tr></table>
 
