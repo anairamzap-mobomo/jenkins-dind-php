@@ -30,16 +30,16 @@ services:
     networks:
      - jenkins
     environment:
-      - DOCKER_CERT_PATH=/etc/nginx/certs
+      - DOCKER_CERT_PATH=/certs/client
       - DOCKER_TLS_VERIFY=1
       - DHPARAM_GENERATION=0
     ports:
-      - '8880:80'
-      - '1443:443'
+      - '80:80'
+      - '443:443'
     volumes:
       - /home/bitnami/jenkins_mbn/certs:/etc/nginx/certs
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - jenkins-docker-certs:/etc/nginx/certs
+      - jenkins-docker-certs:/certs/client:ro
 
 # Jenkins blueocean.
   jenkins-blueocean:
@@ -70,7 +70,7 @@ services:
       - agent-home:/home/jenkins
     ports:
       - 8080:8080
-
+      -50000:50000
   portainer:
     depends_on:
       - docker
