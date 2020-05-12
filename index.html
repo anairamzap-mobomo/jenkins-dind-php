@@ -271,6 +271,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="internal_docs.html" title="Deploy to QA server" class="md-nav__link">
+      Deploy to QA server
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -349,7 +361,7 @@ gitHub username. </p>
 <h2 id="stumped-into-some-odd-bugs-in-the-road">Stumped into some odd bugs in the road <img alt="🐛" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f41b.png" title=":bug:" /> <img alt="🐞" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f41e.png" title=":beetle:" /> <img alt="🐜" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f41c.png" title=":ant:" /> <img alt="🦠" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f9a0.png" title=":microbe:" /><a class="headerlink" href="#stumped-into-some-odd-bugs-in-the-road" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
-<p>git Acquia repo requires git username/email</p>
+<p><del>git Acquia repo requires git username/email</del></p>
 <p><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
  2
  3
@@ -378,11 +390,11 @@ fatal: empty ident name <span class="o">(</span><span class="k">for</span> &lt;<
 </pre></div>
 </td></tr></table>
 Apparently the&rsquo;ve fixed this in blt version 10.x: <a href="https://github.com/acquia/blt/pull/3541">https://github.com/acquia/blt/pull/3541</a></p>
-<p>As a workaround (since updating the blt version could very likely cause other issues I wanted to avoid)
+<p>As a <strong>workaround</strong> (since updating the blt version could very likely cause other issues I wanted to avoid)
 I&rsquo;ve added a git config user.name and user.email in the agent Dockerfile&hellip; <img alt="😇" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f607.png" title=":innocent:" /></p>
 </li>
 <li>
-<p>git acquia repo key not found/trusted</p>
+<p><del>git acquia repo key not found/trusted</del></p>
 <p>In order to workaround this issue I had to run the <code>blt artifact:deploy</code> command manually from the jenkins agent repo
 and accept the connection:</p>
 <p><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
@@ -395,6 +407,7 @@ and accept the connection:</p>
 </pre></div>
 </td></tr></table>
 Thanks so much Acquia! <img alt="✨" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/2728.png" title=":sparkles:" /> <img alt="❤" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/2764.png" title=":heart:" /></p>
+<p>To fix this I&rsquo;ve added the dev server host to the <code>/home/jenkins/.ssh/known_hosts</code></p>
 </li>
 <li>
 <p>On <code>composer install</code> run by the <code>vendor/bin/blt artifact:deploy</code> command (which is using robo)</p>

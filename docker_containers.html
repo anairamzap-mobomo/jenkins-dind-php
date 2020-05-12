@@ -235,6 +235,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="internal_docs.html" title="Deploy to QA server" class="md-nav__link">
+      Deploy to QA server
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -271,7 +283,8 @@ we&rsquo;ve decided to run containers for all the required services:</p>
 <li>Docker Daemon (docker:dind)</li>
 <li>Nginx (for the reverse proxy, TLS/https)</li>
 <li>Jenkins (jenkins-blueocean)</li>
-<li><a href="https://hub.docker.com/r/anairamzap/jenkins-dind-php">Jenkins SSH Agent</a> (to make deployments in a different -ie not <code>master</code>- Jenkins Node)</li>
+<li><a href="https://hub.docker.com/r/anairamzap/jenkins-dind-php">Jenkins SSH Agent</a> based on <a href="https://hub.docker.com/r/jenkins/ssh-agent">https://hub.docker.com/r/jenkins/ssh-agent</a> 
+(to make deployments in a different -ie not <code>master</code>- Jenkins Node)</li>
 <li>Portainer (Web UI to manage containers)</li>
 </ul>
 <p>We have &ldquo;packaged&rdquo; all those in a lovely <code>docker-compose</code> yml file:</p>
@@ -387,124 +400,124 @@ we&rsquo;ve decided to run containers for all the required services:</p>
 110
 111
 112
-113</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nt">version</span><span class="p">:</span> <span class="s">&#39;3.8&#39;</span>
-<span class="nt">services</span><span class="p">:</span>
-<span class="c1"># Docker daemon. DNS name &quot;docker&quot;</span>
-  <span class="nt">docker</span><span class="p">:</span>
-    <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-docker</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker:dind</span>
-    <span class="nt">privileged</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">jenkins</span><span class="p">:</span>
-        <span class="nt">aliases</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>
-    <span class="nt">environment</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_TLS_CERTDIR=/certs</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-docker-certs:/certs/client</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-data:/var/jenkins_home</span>
-    <span class="nt">ports</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="s">&#39;2376:2376&#39;</span>
+113</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>version: &#39;3.8&#39;
+services:
+# Docker daemon. DNS name &quot;docker&quot;
+  docker:
+    container_name: jenkins-docker
+    image: docker:dind
+    privileged: true
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    environment:
+        - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+        - jenkins-docker-certs:/certs/client
+        - jenkins-data:/var/jenkins_home
+    ports:
+      - &#39;2376:2376&#39;
 
-<span class="c1"># Nginx with reverse proxy for SSL/https.</span>
-  <span class="nt">jenkins-nginx</span><span class="p">:</span>
-    <span class="nt">depends_on</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>
-    <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-nginx</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jwilder/nginx-proxy</span>
-    <span class="nt">hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-nginx</span>
-    <span class="nt">privileged</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-    <span class="nt">networks</span><span class="p">:</span>
-     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
-    <span class="nt">environment</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_CERT_PATH=/etc/nginx/certs</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_TLS_VERIFY=1</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DHPARAM_GENERATION=0</span>
-    <span class="nt">ports</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="s">&#39;8880:80&#39;</span>
-      <span class="p p-Indicator">-</span> <span class="s">&#39;1443:443&#39;</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock:/tmp/docker.sock:ro</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-docker-certs:/etc/nginx/certs</span>
+# Nginx with reverse proxy for SSL/https.
+  jenkins-nginx:
+    depends_on:
+      - docker
+    container_name: jenkins-nginx
+    image: jwilder/nginx-proxy
+    hostname: jenkins-nginx
+    privileged: true
+    networks:
+     - jenkins
+    environment:
+      - DOCKER_CERT_PATH=/etc/nginx/certs
+      - DOCKER_TLS_VERIFY=1
+      - DHPARAM_GENERATION=0
+    ports:
+      - &#39;8880:80&#39;
+      - &#39;1443:443&#39;
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - jenkins-docker-certs:/etc/nginx/certs
 
-<span class="c1"># Jenkins blueocean.</span>
-  <span class="nt">jenkins</span><span class="p">:</span>
-    <span class="nt">depends_on</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-nginx</span>
-    <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-blueocean</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkinsci/blueocean</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
-    <span class="nt">environment</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_HOST=tcp://docker:2376</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_CERT_PATH=/certs/client</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_TLS_VERIFY=1</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="s">&quot;jenkins-data:/var/jenkins_home&quot;</span>
-      <span class="p p-Indicator">-</span> <span class="s">&quot;jenkins-docker-certs:/certs/client:ro&quot;</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">agent-home:/home/jenkins</span>
-    <span class="nt">ports</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">8080:8080</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">50000:50000</span>
+# Jenkins blueocean.
+  jenkins:
+    depends_on:
+      - docker
+      - jenkins-nginx
+    container_name: jenkins-blueocean
+    image: jenkinsci/blueocean
+    networks:
+      - jenkins
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - &quot;jenkins-data:/var/jenkins_home&quot;
+      - &quot;jenkins-docker-certs:/certs/client:ro&quot;
+      - agent-home:/home/jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
 
-<span class="c1"># Portainer web UI.</span>
-  <span class="nt">portainer</span><span class="p">:</span>
-    <span class="nt">depends_on</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">portainer/portainer</span>
-    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
-    <span class="nt">environment</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_TLS_VERIFY=1</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_CERT_PATH=/certs/client</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock:/var/run/docker.sock</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">portainer_data:/data</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-docker-certs:/certs/client:ro</span>
-    <span class="nt">ports</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">9000:9000</span>
+# Portainer web UI.
+  portainer:
+    depends_on:
+      - docker
+    image: portainer/portainer
+    restart: always
+    environment:
+      - DOCKER_TLS_VERIFY=1
+      - DOCKER_CERT_PATH=/certs/client
+    networks:
+      - jenkins
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+      - jenkins-docker-certs:/certs/client:ro
+    ports:
+    - 9000:9000
 
-<span class="c1"># Jenkins ssh agent to build and execute Acquia deployments :)</span>
-  <span class="nt">ssh-agent</span><span class="p">:</span>
-    <span class="nt">domainname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ssh-agent</span>
-    <span class="nt">hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
-    <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-ssh_agent</span>
-    <span class="nt">depends_on</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
-    <span class="nt">build</span><span class="p">:</span>
-      <span class="nt">context</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
-      <span class="nt">dockerfile</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./Dockerfile</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">anairamzap/jenkins-dind-php:latest</span>
-    <span class="nt">environment</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY}</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">JAVA_HOME=/usr/lib/jvm/openjdk/</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_HOST=tcp://docker:2376</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_CERT_PATH=/certs/client</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DOCKER_TLS_VERIFY=1</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">jenkins</span><span class="p">:</span>
-        <span class="nt">aliases</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins.ssh-agent</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-docker-certs:/certs/client:ro</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins-data:/var/jenkins_home</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">agent-home:/home/jenkins</span>
+# Jenkins ssh agent to build and execute Acquia deployments :)
+  ssh-agent:
+    domainname: ssh-agent
+    hostname: jenkins
+    container_name: jenkins-ssh_agent
+    depends_on:
+      - jenkins
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: anairamzap/jenkins-dind-php:latest
+    environment:
+      - JENKINS_SLAVE_SSH_PUBKEY=<span class="cp">${</span><span class="n">JENKINS_SLAVE_SSH_PUBKEY</span><span class="cp">}</span>
+      - JAVA_HOME=/usr/lib/jvm/openjdk/
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    networks:
+      jenkins:
+        aliases:
+          - jenkins.ssh-agent
+    volumes:
+      - jenkins-docker-certs:/certs/client:ro
+      - jenkins-data:/var/jenkins_home
+      - agent-home:/home/jenkins
 
-<span class="nt">networks</span><span class="p">:</span>
-  <span class="nt">jenkins</span><span class="p">:</span>
-    <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bridge</span>
-<span class="nt">volumes</span><span class="p">:</span>
-  <span class="nt">jenkins-data</span><span class="p">:</span>
-  <span class="nt">jenkins-docker-certs</span><span class="p">:</span>
-  <span class="nt">portainer_data</span><span class="p">:</span>
-  <span class="nt">agent-home</span><span class="p">:</span>
+networks:
+  jenkins:
+    driver: bridge
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
+  portainer_data:
+  agent-home:
 </pre></div>
 </td></tr></table>
 
-<p>If you change something in the Dockerfile for the jenkins ssh agent, remember to re-build that image:</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker build --tag anairamzap/jenkins-dind-php:latest .
+<p>If you change something in the Dockerfile(s) for the jenkins ssh agent or for the jenkins-blueocean, remember to re-build that image:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker-compose up -d --build --no-cache
 </pre></div>
 </td></tr></table>
 
@@ -515,9 +528,10 @@ we&rsquo;ve decided to run containers for all the required services:</p>
 
 <p>In order to run this we should check that we&rsquo;ve added:</p>
 <ol>
-<li>pub ssh key in the <code>.env</code> file</li>
-<li>ssh private key added to Jenkins &gt; Credentials</li>
-<li>Above credential to be used on both the ACSF Daily Agent and on the Freestyle Project</li>
+<li>ssh private key added to Jenkins &gt; Credentials
+    You can get it on jenkins-blueocean container <code>/var/jenkins_home/.ssh/id_rsa</code> please be careful
+    and do not share it in plain emails/messages :) </li>
+<li>Above credentials to be used on both the ACSF Daily Agent and on the Freestyle Project</li>
 </ol>
                 
                   
