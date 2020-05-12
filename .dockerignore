@@ -1,0 +1,6 @@
+# git stuff
+.git
+# phpstorm stuff
+.idea
+# host env
+.env

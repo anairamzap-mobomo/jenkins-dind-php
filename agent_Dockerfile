@@ -1,0 +1,36 @@
+##
+# Jenkins SSH Agent.
+##
+FROM jenkins/ssh-slave:latest as ssh-agent
+ENV JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY}
+ENV JENKINS_AGENT_HOME=/var/jenkins_home
+
+## Install docker on the agent
+RUN  curl -sSL https://get.docker.com/ | sh
+## PHP + rsync for blt/robo, make to run commands from Makefile, composer to install deps, vim because is great :).
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install \
+    php-cli \
+    php-xml \
+    build-essential \
+    composer \
+    rsync \
+    vim \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+USER jenkins
+# Git username and email are required by Acquia to be able to push to their repo.
+RUN git config --global user.email "jenkins@mobomo.com"
+RUN git config --global user.name "jenkins"
+
+### We add the Acquia (Dev) host key to the known hosts.
+#RUN mkdir -p /home/jenkins/.ssh \
+#    # We add dev server pub key to Jenkins known_hosts.
+#    && ssh-keyscan -H svn-2398.enterprise-g1.hosting.acquia.com >> /home/jenkins/.ssh/known_hosts
+
+USER root
+COPY agent-entrypoint /usr/local/bin/agent-entrypoint
+RUN chmod +x /usr/local/bin/agent-entrypoint
+
+#EXPOSE 22
+ENTRYPOINT ["/bin/bash","-c","/usr/local/bin/agent-entrypoint"]

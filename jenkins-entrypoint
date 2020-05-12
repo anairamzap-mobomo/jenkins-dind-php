@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#set -ex
+
+mkdir -p ${HOME}/.ssh
+# If not already present, we generate a ssh key pair to be used in the SSH connection with the agent.
+if [ ! -f "${HOME}"/.ssh/id_rsa ]; then
+  echo "No keys present. Creating SSH Key Pair..."
+  eval `ssh-agent -s` \
+    && ssh-keygen -q -t rsa -b 4096 -f "${HOME}"/.ssh/id_rsa -N "" <<< y \
+    && echo "" \
+    && echo "-- [[ Copy this pub ssh key to add it as a Jenkins Credential!]] --" \
+    && echo "" \
+    && cat "${HOME}"/.ssh/id_rsa.pub \
+    && echo "" \
+    && echo "^^^ This pub key should be added to the SSH Agent and to the ACSF job with jenkins username ^^^"
+fi
+
+# We append jenkins pub key as entry in the authorized_keys.
+cat ${HOME}/.ssh/id_rsa.pub > "${HOME}"/.ssh/authorized_keys
+
+# We add Jenkins SSH-agent to known hosts.
+# @todo: Find a nice way to parse the known_hosts file (probably ssh-keygen -F hostname) and avoid re-adding same entry.
+ssh-keyscan -H jenkins.ssh-agent >> ${HOME}/.ssh/known_hosts
+
+
+echo "Launching Jenkins..."
+# We finally run the original script.
+/usr/local/bin/jenkins.sh
