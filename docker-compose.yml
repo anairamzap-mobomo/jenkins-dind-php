@@ -37,6 +37,7 @@ services:
       - '8880:80'
       - '1443:443'
     volumes:
+      - /home/bitnami/jenkins_mbn/certs:/etc/nginx/certs
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - jenkins-docker-certs:/etc/nginx/certs
 
@@ -61,6 +62,8 @@ services:
       - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
       - DOCKER_TLS_VERIFY=1
+      - VIRTUAL_HOST=jenkins.mobomo.net
+      - VIRTUAL_PORT=8080
     volumes:
       - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
