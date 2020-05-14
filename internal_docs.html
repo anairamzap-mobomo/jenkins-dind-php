@@ -300,7 +300,7 @@
 <ol start="3">
 <li>Get the default Jenkins password from the jenkins-blueocean container (and copy it):</li>
 </ol>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker exec -it jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker <span class="nb">exec</span> -it jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword
 </pre></div>
 </td></tr></table>
 
@@ -323,7 +323,15 @@
 <h1 id="useful-commands">Useful commands<a class="headerlink" href="#useful-commands" title="Permanent link">&para;</a></h1>
 <h3 id="for-the-agent">For the agent<a class="headerlink" href="#for-the-agent" title="Permanent link">&para;</a></h3>
 <h3 id="for-jenkins">For Jenkins<a class="headerlink" href="#for-jenkins" title="Permanent link">&para;</a></h3>
-<h3 id="_1"><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<h4 id="backup-volumejenkins_home">Backup volume/jenkins_home<a class="headerlink" href="#backup-volumejenkins_home" title="Permanent link">&para;</a></h4>
+<p><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker run --volumes-from jenkins-blueocean -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/backup debian tar -zcvf /backup/<span class="k">$(</span>date +%Y-%m-%d<span class="k">)</span>_jenkins-blueocean.tar.gz --exclude<span class="o">=</span>workspace /var/jenkins_home
+</pre></div>
+</td></tr></table>
+generates tar.gz file on the host, excluding the <code>workspace</code> dir.</p>
+<h3 id="restore">Restore<a class="headerlink" href="#restore" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>docker run --volumes-from jenkins-blueocean -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/backup debian tar -zxvf /backup/jenkins-blueocean.tar.gz
+</pre></div>
+</td></tr></table>
                 
                   
                 

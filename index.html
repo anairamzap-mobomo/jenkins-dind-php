@@ -211,6 +211,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#nice-to-have-tasks" title="Nice to have tasks" class="md-nav__link">
+    Nice to have tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#server-details" title="Server Details" class="md-nav__link">
     Server Details
   </a>
@@ -304,6 +311,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#nice-to-have-tasks" title="Nice to have tasks" class="md-nav__link">
+    Nice to have tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#server-details" title="Server Details" class="md-nav__link">
     Server Details
   </a>
@@ -344,15 +358,39 @@ gitHub username. </p>
 <p>We are Using Jenkins in order to automate the following tasks:</p>
 <ol>
 <li>
-<p>PR Builds (using the <code>Jenkinsfile.testing</code> pipeline)</p>
+<p>PR Builds (using the <code>Jenkinsfile.testing</code> pipeline). This happens on the Jenkins &ldquo;Master&rdquo; agent.</p>
+<ul>
+<li>Everytime we open a new PR, that PR code would be checked (<code>make code-test</code>) and built.</li>
+</ul>
 </li>
 <li>
-<p><code>develop</code> branch build (using the <code>Jenkinsfile.testing</code> pipeline)</p>
+<p><code>develop</code> branch build (using the <code>Jenkinsfile.testing</code> pipeline). This happens on the Jenkins &ldquo;Master&rdquo; agent.</p>
+<ul>
+<li>Everytime that a PR is merged into <code>develop</code> branch, Jenkins will build that branch.</li>
+</ul>
 </li>
 <li>
-<p>Acquia Dev env deployments (hopefully one day!) <img alt="🤞🏾" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f91e-1f3fe.png" title=":fingers_crossed_tone4:" /></p>
+<p>Acquia Dev env deployments. This happens on the SSH Agent &ldquo;Daily&rdquo; node.</p>
+<ul>
+<li>Jenkins will build <code>develop</code>  &gt; Create a tag &gt; Deploy that tag &gt; &lsquo;checkout&rsquo; the tag for Dev env. 
+So this will cover all the deployment tasks we were manually doing. We haven&rsquo;t defined a time yet, but we think it could 
+run everyday at&hellip; 7am. So we will always have a &ldquo;fresh&rdquo; Dev env.</li>
+</ul>
 </li>
 </ol>
+<h2 id="nice-to-have-tasks">Nice to have tasks<a class="headerlink" href="#nice-to-have-tasks" title="Permanent link">&para;</a></h2>
+<p>Jenkins can be easily integrated with Jira, so a nice thing would be to configure the Jira integration in a way that 
+makes sense for us. Jenkins is already integrated with github, so we could make use of that to properly &ldquo;label&rdquo; PRs</p>
+<p>For example: </p>
+<ul>
+<li>
+<p>We could start using &ldquo;releases&rdquo; on Jira so Jenkins can properly tag all the tickets included in a deployment, with
+the release tag.</p>
+</li>
+<li>
+<p>We could use github integration to properly label PRs once they get merged (not sure if doable actually, but would be great :P )</p>
+</li>
+</ul>
 <h2 id="server-details">Server Details<a class="headerlink" href="#server-details" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://jenkins.mobomo.net">https://jenkins.mobomo.net</a>  <img alt="🔐" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f510.png" title=":closed_lock_with_key:" /> <img alt="👀" class="twemoji" src="https://twemoji.maxcdn.com/2/72x72/1f440.png" title=":eyes:" /></li>

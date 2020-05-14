@@ -91,6 +91,10 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
+      <a href="#acsf-mbn-workflow" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
@@ -209,6 +213,8 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
+      
+    
     
     <a href="workflow.html" title="Workflow" class="md-nav__link md-nav__link--active">
       Workflow
@@ -248,15 +254,49 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
                 
                 
-                  <h1>Workflow</h1>
-                
-                
+                <h1 id="acsf-mbn-workflow">ACSF MBN Workflow<a class="headerlink" href="#acsf-mbn-workflow" title="Permanent link">&para;</a></h1>
+<p>As illustrated in the following graph, this is general workflow idea:</p>
+<ol>
+<li><code>develop</code> branch is created from <code>production</code></li>
+<li>Ticket 1 branch is <strong>created from <code>production</code></strong>.</li>
+<li>Ticket 1 branch is <strong>merged into <code>develop</code></strong> from a PR.</li>
+<li>Jenkins creates a tag from <code>develop</code> branch and deploys it to DEV environment.</li>
+<li>QA team can test on DEV</li>
+<li>Ticket 2 branch is created from <code>production</code>.</li>
+<li>Ticket 2 branch is merged into <code>develop</code> from a PR.</li>
+<li>Jenkins creates a tag from <code>develop</code> branch and deploys it to DEV environment.</li>
+<li>QA team can test on DEV</li>
+<li>Release branch is created from <code>production</code>.</li>
+<li>Some <strong>manually</strong> selected tickets branches are merged into release branch.</li>
+<li>Release tag is created from release branch.</li>
+<li>Release tag is deployed to TEST environment.</li>
+<li>QA team test on TEST.</li>
+<li>Release tag is deployed to LIVE environment.</li>
+<li>QA team test on LIVE.</li>
+</ol>
+<p>NOTE: Releases are the branches that get deployed further into staging/test environments. Not all releases are pushed to <code>production</code>.</p>
+<p><img alt="Screenshot" src="img/mbn_workflow.png" /></p>
                 
                   
                 
