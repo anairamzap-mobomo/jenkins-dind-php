@@ -358,19 +358,19 @@ gitHub username. </p>
 <p>We are Using Jenkins in order to automate the following tasks:</p>
 <ol>
 <li>
-<p>PR Builds (using the <code>Jenkinsfile.testing</code> pipeline). This happens on the Jenkins &ldquo;Master&rdquo; agent.</p>
+<p>PR Builds (using the <code>Jenkinsfile.testing</code> pipeline). This runs on the Jenkins &ldquo;Master&rdquo; agent.</p>
 <ul>
 <li>Everytime we open a new PR, that PR code would be checked (<code>make code-test</code>) and built.</li>
 </ul>
 </li>
 <li>
-<p><code>develop</code> branch build (using the <code>Jenkinsfile.testing</code> pipeline). This happens on the Jenkins &ldquo;Master&rdquo; agent.</p>
+<p><code>develop</code> branch build (using the <code>Jenkinsfile.testing</code> pipeline). This runs on the Jenkins &ldquo;Master&rdquo; agent.</p>
 <ul>
 <li>Everytime that a PR is merged into <code>develop</code> branch, Jenkins will build that branch.</li>
 </ul>
 </li>
 <li>
-<p>Acquia Dev env deployments. This happens on the SSH Agent &ldquo;Daily&rdquo; node.</p>
+<p>Acquia Dev env deployments. This runs on the SSH Agent &ldquo;Daily&rdquo; node.</p>
 <ul>
 <li>Jenkins will build <code>develop</code>  &gt; Create a tag &gt; Deploy that tag &gt; &lsquo;checkout&rsquo; the tag for Dev env. 
 So this will cover all the deployment tasks we were manually doing. We haven&rsquo;t defined a time yet, but we think it could 
