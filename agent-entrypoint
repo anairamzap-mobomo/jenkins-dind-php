@@ -20,8 +20,17 @@ mkdir -p /home/jenkins/.ssh
 # We copy ssh dir to /home/jenkins to be available for blt.
 cp -a /var/jenkins_home/.ssh /home/jenkins/
 
-## We add the Acquia (Dev) host key to the known hosts.
+## We remove and add the Acquia (Dev) host key to the known hosts.
+ssh-keygen -R svn-2398.enterprise-g1.hosting.acquia.com
 ssh-keyscan -H svn-2398.enterprise-g1.hosting.acquia.com >> /home/jenkins/.ssh/known_hosts
+## We Remove and then add the host key.
+ssh-keygen -R jenkins.mobomo.net
+ssh-keyscan -H jenkins.mobomo.net >> /home/jenkins/.ssh/known_hosts
+
+
+# Git username and email are required by Acquia to be able to push to their repo.
+su jenkins -c "git config --global user.email "jenkins@mobomo.com""
+su jenkins -c "git config --global user.name "jenkins""
 
 # We call the entrypoint for the base image
 /usr/local/bin/setup-sshd "$@"

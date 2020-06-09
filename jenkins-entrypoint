@@ -19,10 +19,29 @@ fi
 # We append jenkins pub key as entry in the authorized_keys.
 cat ${HOME}/.ssh/id_rsa.pub > "${HOME}"/.ssh/authorized_keys
 
-# We add Jenkins SSH-agent to known hosts.
-# @todo: Find a nice way to parse the known_hosts file (probably ssh-keygen -F hostname) and avoid re-adding same entry.
-ssh-keyscan -H jenkins.ssh-agent >> ${HOME}/.ssh/known_hosts
+# We check if keys are not already present, if not, we add them to known hosts.
+#ssh-keygen -R jenkins.ssh-agent
+HOSTS=("jenkins.ssh-agent" "jenkins.qa-agent-1" "jenkins.qa-agent-2" "jenkins.qa-agent-3" "jenkins.qa-agent-4")
+for h in "${HOSTS[@]}"
+do
+  if [[ "" == $(ssh-keygen -H -F "$h") ]]; then
 
+    echo "Key is not present! Adding remote machine ($h) to known_hosts";
+    ssh-keyscan -H $h >> ${HOME}/.ssh/known_hosts
+
+ else
+
+   echo "Nothing to do, $h is already in known_hosts file :)"
+
+ fi
+   # ssh-keygen -R $h
+   # echo "$h was removed from knonw_hosts"
+done
+#ssh-keyscan -H jenkins.ssh-agent >> ${HOME}/.ssh/known_hosts
+#ssh-keyscan -H jenkins.qa-agent-1 >> ${HOME}/.ssh/known_hosts
+#ssh-keyscan -H jenkins.qa-agent-2 >> ${HOME}/.ssh/known_hosts
+#ssh-keyscan -H jenkins.qa-agent-3 >> ${HOME}/.ssh/known_hosts
+#ssh-keyscan -H jenkins.qa-agent-4 >> ${HOME}/.ssh/known_hosts
 
 echo "Launching Jenkins..."
 # We finally run the original script.
