@@ -1,6 +1,6 @@
 #!/bin/bash
 # create .ssh directory
-#mkdir -p "${JENKINS_AGENT_HOME}/.ssh"
+mkdir -p "${JENKINS_AGENT_HOME}/.ssh"
 
 
 #readonly JENKINS_PUBKEY="$(cat /var/jenkins_home/.ssh/id_rsa.pub)"
@@ -15,6 +15,7 @@
 echo "${JENKINS_AGENT_HOME}"
 echo "${HOME}"
 whoami
+mkdir -p /home/jenkins
 mkdir -p /home/jenkins/.ssh
 ## We cp the ssh keys for jenkins user to its home.
 # We copy ssh dir to /home/jenkins to be available for blt.

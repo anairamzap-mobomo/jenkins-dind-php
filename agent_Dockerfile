@@ -1,7 +1,7 @@
 ##
 # Jenkins SSH Agent.
 ##
-FROM jenkins/ssh-slave:latest as ssh-agent
+FROM jenkins/ssh-slave:jdk11 as ssh-agent
 ENV JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY}
 ENV JENKINS_AGENT_HOME=/var/jenkins_home
 
@@ -9,7 +9,7 @@ ENV JENKINS_AGENT_HOME=/var/jenkins_home
 RUN  curl -sSL https://get.docker.com/ | sh
 
 ## PHP
-RUN apt-get update \
+RUN apt-get --allow-releaseinfo-change update \
     && apt-get -y --no-install-recommends install \
     php-cli
 
@@ -28,7 +28,7 @@ RUN EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)
     ls -l /usr/local/bin/
 
 ## PHP + rsync for blt/robo, make to run commands from Makefile, vim because is great :).
-RUN apt-get update \
+RUN apt-get --allow-releaseinfo-change update \
     && apt-get -y --no-install-recommends install \
     php-xml \
     php-curl \
