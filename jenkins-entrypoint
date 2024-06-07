@@ -37,11 +37,14 @@ do
    # ssh-keygen -R $h
    # echo "$h was removed from knonw_hosts"
 done
-#ssh-keyscan -H jenkins.ssh-agent >> ${HOME}/.ssh/known_hosts
-#ssh-keyscan -H jenkins.qa-agent-1 >> ${HOME}/.ssh/known_hosts
-#ssh-keyscan -H jenkins.qa-agent-2 >> ${HOME}/.ssh/known_hosts
-#ssh-keyscan -H jenkins.qa-agent-3 >> ${HOME}/.ssh/known_hosts
-#ssh-keyscan -H jenkins.qa-agent-4 >> ${HOME}/.ssh/known_hosts
+
+# Add github.com key to known hosts
+if [[ "" == $(ssh-keygen -H -F github.com)  ]]; then
+  echo "Github rsa key not present, adding it to known hosts."
+  ssh-keyscan -H github.com >> ${HOME}/.ssh/known_hosts
+else
+  echo "Nothing to do, github.com is already in known_hosts file :)"
+fi
 
 echo "Launching Jenkins..."
 # We finally run the original script.

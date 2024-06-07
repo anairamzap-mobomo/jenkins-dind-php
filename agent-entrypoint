@@ -27,7 +27,9 @@ ssh-keyscan -H svn-2398.enterprise-g1.hosting.acquia.com >> /home/jenkins/.ssh/k
 ## We Remove and then add the host key.
 ssh-keygen -R jenkins.mobomo.net
 ssh-keyscan -H jenkins.mobomo.net >> /home/jenkins/.ssh/known_hosts
-
+## We Remove and then re-add the github.com keys.
+ssh-keygen -R github.com
+ssh-keyscan -H github.com >> /home/jenkins/.ssh/known_hosts
 
 # Git username and email are required by Acquia to be able to push to their repo.
 su jenkins -c "git config --global user.email "jenkins@mobomo.com""
