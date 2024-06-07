@@ -52,8 +52,8 @@ services:
       context: .
       dockerfile: ./Dockerfile
       target: jenkins-master
-    image: jenkinsci/blueocean
-#    restart: unless-stopped
+    image: jenkins/jenkins:alpine-jdk21
+    restart: on-failure
     networks:
       jenkins:
         aliases:
@@ -71,22 +71,22 @@ services:
     ports:
       - 8080:8080
       - 50000:50000
-  portainer:
-    depends_on:
-      - docker
-    image: portainer/portainer
-    restart: always
-    environment:
-      - DOCKER_TLS_VERIFY=1
-      - DOCKER_CERT_PATH=/certs/client
-    networks:
-      - jenkins
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-      - jenkins-docker-certs:/certs/client:ro
-    ports:
-    - 9000:9000
+#  portainer:
+#    depends_on:
+#      - docker
+#    image: portainer/portainer
+#    restart: always
+#    environment:
+#      - DOCKER_TLS_VERIFY=1
+#      - DOCKER_CERT_PATH=/certs/client
+#    networks:
+#      - jenkins
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - portainer_data:/data
+#      - jenkins-docker-certs:/certs/client:ro
+#    ports:
+#    - 9000:9000
 
   ssh-agent:
     domainname: ssh-agent
