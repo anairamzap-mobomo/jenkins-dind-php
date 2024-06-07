@@ -98,7 +98,7 @@ services:
       context: .
       dockerfile: ./agent_Dockerfile
       target: ssh-agent
-    image: anairamzap/jenkins-dind-php:latest
+    image: anairamzap/jenkins-dind-php:jdk21
 #    restart: always
 #    env_file:
 #      - env/.jenkins_env
