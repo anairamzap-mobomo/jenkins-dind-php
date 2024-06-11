@@ -5,13 +5,18 @@ FROM jenkins/ssh-agent:latest-bookworm-jdk21 as ssh-agent
 ENV JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY}
 ENV JENKINS_AGENT_HOME=/var/jenkins_home
 
+RUN apt-get update \
+    && apt-get -y install \
+    curl
+
 ## Install docker on the agent
 RUN  curl -sSL https://get.docker.com/ | sh
 
 ## PHP
-RUN apt-get --allow-releaseinfo-change update \
-    && apt-get -y --no-install-recommends install \
-    php-cli
+RUN apt-get update \
+    && apt-get -y install \
+    php-cli \
+    wget
 
 ## Composer.
 RUN EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)" && \
@@ -28,8 +33,8 @@ RUN EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)
     ls -l /usr/local/bin/
 
 ## PHP + rsync for blt/robo, make to run commands from Makefile, vim because is great :).
-RUN apt-get --allow-releaseinfo-change update \
-    && apt-get -y --no-install-recommends install \
+RUN apt-get update \
+    && apt-get -y install \
     php-xml \
     php-curl \
     php-mbstring \

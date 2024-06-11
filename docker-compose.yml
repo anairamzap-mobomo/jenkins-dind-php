@@ -1,4 +1,3 @@
-version: '3.8'
 services:
 # Docker daemon. DNS name "docker"
   docker:
@@ -19,34 +18,34 @@ services:
       - '2376:2376'
 
 # Nginx with reverse proxy for SSL/https.
-  jenkins-nginx:
-    depends_on:
-      - docker
-    container_name: jenkins-nginx
-    image: jwilder/nginx-proxy
-    restart: always
-    hostname: jenkins-nginx
-    privileged: true
-    networks:
-     - jenkins
-    environment:
-      - DOCKER_CERT_PATH=/certs/client
-      - DOCKER_TLS_VERIFY=1
-      - DHPARAM_GENERATION=0
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - /home/bitnami/jenkins_mbn/certs:/etc/nginx/certs
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - jenkins-docker-certs:/certs/client:ro
+#  jenkins-nginx:
+#    depends_on:
+#      - docker
+#    container_name: jenkins-nginx
+#    image: jwilder/nginx-proxy
+#    restart: always
+#    hostname: jenkins-nginx
+#    privileged: true
+#    networks:
+#     - jenkins
+#    environment:
+#      - DOCKER_CERT_PATH=/certs/client
+#      - DOCKER_TLS_VERIFY=1
+#      - DHPARAM_GENERATION=0
+#    ports:
+#      - '80:80'
+#      - '443:443'
+#    volumes:
+#      - /home/bitnami/jenkins_mbn/certs:/etc/nginx/certs
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#      - jenkins-docker-certs:/certs/client:ro
 
 # Jenkins blueocean.
   jenkins-blueocean:
     hostname: jenkins
     depends_on:
       - docker
-      - jenkins-nginx
+      - ssh-agent
     container_name: jenkins-blueocean
     build:
       context: .
@@ -54,6 +53,7 @@ services:
       target: jenkins-master
     image: jenkins/jenkins:alpine-jdk21
     restart: on-failure
+    #restart: unless-stopped
     networks:
       jenkins:
         aliases:
@@ -71,6 +71,7 @@ services:
     ports:
       - 8080:8080
       - 50000:50000
+
 #  portainer:
 #    depends_on:
 #      - docker
@@ -89,19 +90,13 @@ services:
 #    - 9000:9000
 
   ssh-agent:
-    domainname: ssh-agent
     hostname: jenkins.agent
-    container_name: jenkins-ssh_agent
-    depends_on:
-      - jenkins-blueocean
+    container_name: jenkins-ssh-agent
     build:
       context: .
       dockerfile: ./agent_Dockerfile
       target: ssh-agent
     image: anairamzap/jenkins-dind-php:jdk21
-#    restart: always
-#    env_file:
-#      - env/.jenkins_env
     environment:
       - JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY}
       - JAVA_HOME=/usr/lib/jvm/openjdk/
@@ -125,5 +120,4 @@ networks:
 volumes:
   jenkins-data:
   jenkins-docker-certs:
-  portainer_data:
   agent-home:

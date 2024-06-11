@@ -1,17 +1,8 @@
 #!/bin/bash
 # create .ssh directory
 mkdir -p "${JENKINS_AGENT_HOME}/.ssh"
+touch "${JENKINS_AGENT_HOME}/.ssh/known_hosts"
 
-
-#readonly JENKINS_PUBKEY="$(cat /var/jenkins_home/.ssh/id_rsa.pub)"
-#
-#export JENKINS_SLAVE_SSH_PUBKEY=$JENKINS_PUBKEY
-#
-#docker ps
-#
-#echo "$JENKINS_SLAVE_SSH_PUBKEY"
-#
-#echo "JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY}" >> .env
 echo "${JENKINS_AGENT_HOME}"
 echo "${HOME}"
 whoami
@@ -22,12 +13,15 @@ mkdir -p /home/jenkins/.ssh
 cp -a /var/jenkins_home/.ssh /home/jenkins/
 
 ## We remove and add the Acquia (Dev) host key to the known hosts.
-ssh-keygen -R svn-2398.enterprise-g1.hosting.acquia.com
-ssh-keyscan -H svn-2398.enterprise-g1.hosting.acquia.com >> /home/jenkins/.ssh/known_hosts
+#ssh-keygen -R svn-2398.enterprise-g1.hosting.acquia.com
+#ssh-keyscan -H svn-2398.enterprise-g1.hosting.acquia.com >> /home/jenkins/.ssh/known_hosts
 ## We Remove and then add the host key.
 ssh-keygen -R jenkins.mobomo.net
 ssh-keyscan -H jenkins.mobomo.net >> /home/jenkins/.ssh/known_hosts
 
+## We Remove and then re-add the github.com keys.
+ssh-keygen -R github.com
+ssh-keyscan -H github.com >> /home/jenkins/.ssh/known_hosts
 
 # Git username and email are required by Acquia to be able to push to their repo.
 su jenkins -c "git config --global user.email "jenkins@mobomo.com""
