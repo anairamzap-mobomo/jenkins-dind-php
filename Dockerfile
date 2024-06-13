@@ -1,7 +1,7 @@
 ##
 # Jenkins "master" Blueocean.
 ##
-FROM jenkins/jenkins:alpine-jdk11 as jenkins-master
+FROM jenkins/jenkins:alpine-jdk21 as jenkins-master
 ENV JENKINS_AGENT_HOME=/var/jenkins_home
 USER root
 

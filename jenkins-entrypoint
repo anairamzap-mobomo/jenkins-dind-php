@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -eo pipefail
+echo "HOME:::: ${HOME}"
 
 mkdir -p ${HOME}/.ssh
 # If not already present, we generate a ssh key pair to be used in the SSH connection with the agent.
@@ -21,27 +22,25 @@ cat ${HOME}/.ssh/id_rsa.pub > "${HOME}"/.ssh/authorized_keys
 
 # We check if keys are not already present, if not, we add them to known hosts.
 #ssh-keygen -R jenkins.ssh-agent
-HOSTS=("jenkins.ssh-agent" "jenkins.qa-agent-1" "jenkins.qa-agent-2" "jenkins.qa-agent-3" "jenkins.qa-agent-4")
+HOSTS=("jenkins.ssh-agent" "jenkins.qa-agent-1")
 for h in "${HOSTS[@]}"
 do
   if [[ "" == $(ssh-keygen -H -F "$h") ]]; then
 
     echo "Key is not present! Adding remote machine ($h) to known_hosts";
-    ssh-keyscan -H $h >> ${HOME}/.ssh/known_hosts
+    ssh-keyscan -H "$h" >> "${HOME}"/.ssh/known_hosts
 
  else
 
    echo "Nothing to do, $h is already in known_hosts file :)"
 
  fi
-   # ssh-keygen -R $h
-   # echo "$h was removed from knonw_hosts"
 done
 
 # Add github.com key to known hosts
 if [[ "" == $(ssh-keygen -H -F github.com)  ]]; then
   echo "Github rsa key not present, adding it to known hosts."
-  ssh-keyscan -H github.com >> ${HOME}/.ssh/known_hosts
+  ssh-keyscan -H github.com >> "${HOME}"/.ssh/known_hosts
 else
   echo "Nothing to do, github.com is already in known_hosts file :)"
 fi
