@@ -22,7 +22,7 @@ cat ${HOME}/.ssh/id_rsa.pub > "${HOME}"/.ssh/authorized_keys
 
 # We check if keys are not already present, if not, we add them to known hosts.
 #ssh-keygen -R jenkins.ssh-agent
-HOSTS=("jenkins.ssh-agent")
+HOSTS=("jenkins.ssh-agent" "jenkins.qa-agent-1")
 for h in "${HOSTS[@]}"
 do
   if [[ "" == $(ssh-keygen -H -F "$h") ]]; then
