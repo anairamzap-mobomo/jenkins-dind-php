@@ -45,7 +45,6 @@ else
   echo "Nothing to do, github.com is already in known_hosts file :)"
 fi
 
-
 echo "Launching Jenkins..."
 # We finally run the original script.
 /usr/local/bin/jenkins.sh
