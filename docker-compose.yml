@@ -30,6 +30,7 @@ services:
       target: jenkins-master
     image: jenkins/jenkins:alpine-jdk21
     #restart: unless-stopped
+    restart: always
     networks:
       jenkins:
         aliases:
@@ -62,6 +63,7 @@ services:
       - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
       - DOCKER_TLS_VERIFY=1
+    restart: always
     networks:
       jenkins:
         aliases:

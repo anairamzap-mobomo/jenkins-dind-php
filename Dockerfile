@@ -15,5 +15,5 @@ USER jenkins
 
 # start image with init.sh script
 ENTRYPOINT ["/usr/local/bin/jenkins-entrypoint"]
-#CMD ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
-CMD ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+CMD ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
+#CMD ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
